@@ -7,6 +7,12 @@ test('Validate user is able to exit login window using the Cancel button', async
     expect(landingPage.loginButton.isVisible()).toBeTruthy();
 })
 
+test.only('Validate user is able to close login window using the x button', async ({page})=>{
+    const landingPage = new LandingPage(page);
+    await landingPage.closeLoginAction();
+    expect(landingPage.loginButton.isVisible()).toBeTruthy();
+})
+
 test('Verify that user is able to login successfully on providing correct credentials', async ({browser})=>{
     const context = await browser.newContext();
     const page = await context.newPage();

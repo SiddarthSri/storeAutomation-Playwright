@@ -12,7 +12,8 @@ class LandingPage
         this.passwordBox = page.locator("#loginpassword");
         this.loginSubmit = page.locator("button[onclick='logIn()']");
         this.loggedInuser = page.locator('#nameofuser');
-        this.closeButton = page.locator("//h5[@id='logInModalLabel']//parent::div/following-sibling::div[@class='modal-footer'] //button[@data-dismiss='modal']")
+        this.closeButton = page.locator("//h5[@id='logInModalLabel']//parent::div/following-sibling::div[@class='modal-footer'] //button[@data-dismiss='modal']");
+        this.loginCloseButton= page.locator("//h5[@id='logInModalLabel']/following-sibling::button[@class='close']");
     }
 
     async performLoginaction()
@@ -29,6 +30,13 @@ class LandingPage
         await this.page.goto(this.webSiteurl)
         await this.loginButton.click();
         await this.closeButton.click();
+    }
+    
+    async closeLoginAction()
+    {
+        await this.page.goto(this.webSiteurl)
+        await this.loginButton.click();
+        await this.loginCloseButton.click();
     }
 }
 
