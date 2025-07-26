@@ -1,5 +1,5 @@
-const {test, expect} = require('@playwright/test');
-const {LandingPage} = require('../pageObjects/landingPage')
+import { test, expect } from '@playwright/test';
+import {LandingPage} from '../pageObjects/landingPage';
 
 test('Validate user is able to exit login window using the Cancel button', async ({page})=>{
     const landingPage = new LandingPage(page);
@@ -7,7 +7,7 @@ test('Validate user is able to exit login window using the Cancel button', async
     expect(landingPage.loginButton.isVisible()).toBeTruthy();
 })
 
-test.only('Validate user is able to close login window using the x button', async ({page})=>{
+test('Validate user is able to close login window using the x button', async ({page})=>{
     const landingPage = new LandingPage(page);
     await landingPage.closeLoginAction();
     expect(landingPage.loginButton.isVisible()).toBeTruthy();
@@ -19,5 +19,7 @@ test('Verify that user is able to login successfully on providing correct creden
     const landingPage = new LandingPage(page);
     await landingPage.performLoginaction();
     await context.storageState({path: 'StorageState.json'});
-    expect(landingPage.loggedInuser.isVisible()).toBeTruthy();
+    const isVisible = await landingPage.loggedInuser.isVisible();
+    
+    expect(isVisible).toBeTruthy();
 })
