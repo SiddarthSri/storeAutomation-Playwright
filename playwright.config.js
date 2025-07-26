@@ -1,5 +1,5 @@
 // @ts-check
-const { devices } = require('@playwright/test');
+import { devices } from '@playwright/test';
 
 /**
  * Read environment variables from file.
@@ -43,13 +43,13 @@ const config = {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     browserName: 'chromium',
-    headless: false,
+    headless: true,
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: 'StoreAutomation-Playwright',
       use: {
         ...devices['Desktop Chrome'],
       },
@@ -108,4 +108,4 @@ const config = {
   // },
 };
 
-module.exports = config;
+export default config;
