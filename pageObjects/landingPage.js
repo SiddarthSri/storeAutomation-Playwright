@@ -16,14 +16,15 @@ export class LandingPage
         this.loginCloseButton= page.locator("//h5[@id='logInModalLabel']/following-sibling::button[@class='close']");
     }
 
-    async performLoginaction()
+    async performLoginaction(username = process.env.USERNAME, password = process.env.PASSWORD)
     {
-        await this.page.goto(this.webSiteurl);
+        await this.page.goto(this.webSiteurl);       
         await this.loginButton.click();
-        await this.usernameBox.fill('testpractice605');
-        await this.passwordBox.fill('TestPractice_new55');
+        await this.usernameBox.fill(username);
+        await this.passwordBox.fill(password);
         await this.loginSubmit.click();
         await this.page.waitForTimeout(2000);
+        await this.loggedInuser.waitFor({ state: 'visible', timeout: 10000 });
     }
 
     async cancelLoginAction()
