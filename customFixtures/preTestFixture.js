@@ -1,5 +1,6 @@
 import { test as base, expect, request } from '@playwright/test';
 import { LandingPage } from '../pageObjects/landingPage';
+import { BasePage } from '../pageObjects/basePage';
 import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
@@ -22,8 +23,10 @@ export const customTest = base.extend({
     const context = await browser.newContext();
     const page = await context.newPage();
     const landingPage = new LandingPage(page);
+    const basePage = new BasePage(page);
     try {
-      console.log(`📝 Using credentials: ${process.env.USERNAME} / ***`);
+      await basePage.navigateToDemoBlaze();
+      await basePage.clickOnLinkByName('Log in');
       await landingPage.performLoginaction(process.env.USERNAME, process.env.PASSWORD);
       await context.storageState({ path: 'StorageState.json' });
       await use(context, page);
@@ -32,20 +35,17 @@ export const customTest = base.extend({
       throw error;
     } finally {
       console.log('Closing page and context in authenticatedContext');
-      await page.close();
-      await context.close();
     }
   },
   unauthenticatedContext: async ({ browser }, use) => {
     const context = await browser.newContext();
     const page = await context.newPage();
     try {
-      await use({ context, page });
+      await use(page);
     } catch (error) {
       console.error('Error during unauthenticatedContext setup:', error);
       throw error;
     } finally {
-      await page.close();
       await context.close();
     }
   },

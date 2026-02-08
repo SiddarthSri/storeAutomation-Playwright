@@ -1,26 +1,29 @@
 import { LandingPage } from '../pageObjects/landingPage';
 import { customTest, expect } from '../customFixtures/preTestFixture';
+import { BasePage } from '../pageObjects/basePage';
 
 let page;
 let landingPage;
+let basePage;
 
 customTest.describe(
-  'This Block Tests the different flows related to Login, cancellations and Incorrect authentication',
+  'These Test are to verify the different flows related to Login, cancellations and Incorrect authentication',
   () => {
     customTest.beforeEach(async ({ unauthenticatedContext }) => {
-      page = await unauthenticatedContext.page;
+      page = await unauthenticatedContext;
       landingPage = new LandingPage(page);
+      basePage = new BasePage(page);
     });
 
     customTest(
       '@regression @loginTests Validate user is able to exit login window using the Cancel button',
       async () => {
         await customTest.step('Navigate to the demoBlaze Website', async () => {
-          await landingPage.naviagetToDemoBlaze();
+          await basePage.navigateToDemoBlaze();
         });
 
         await customTest.step('Click on the Login Button to open the Login Window', async () => {
-          await landingPage.clickOnLoginButton();
+          await basePage.clickOnLinkByName('Log in');
         });
         await customTest.step(' Go on to the Login Window and Cancel it', async () => {
           await landingPage.cancelLoginAction();
@@ -37,11 +40,11 @@ customTest.describe(
 
     customTest('@regression @loginTests Validate user is able to close login window using the x button', async () => {
       await customTest.step('Navigate to the demoBlaze Website', async () => {
-        await landingPage.naviagetToDemoBlaze();
+        await basePage.navigateToDemoBlaze();
       });
 
       await customTest.step('Click on the Login Button to open the Login Window', async () => {
-        await landingPage.clickOnLoginButton();
+        await basePage.clickOnLinkByName('Log in');
       });
 
       await customTest.step('Go to the Login Window and Close it with the X button', async () => {
@@ -60,11 +63,12 @@ customTest.describe(
       '@regression @loginTests Verify that user is able to login successfully on providing correct credentials',
       async () => {
         await customTest.step('Navigate to the demoBlaze Website', async () => {
-          await landingPage.naviagetToDemoBlaze();
+          await basePage.navigateToDemoBlaze();
+          await basePage.getPageTitle('STORE');
         });
 
         await customTest.step('Click on the Login Button to open the Login Window', async () => {
-          await landingPage.clickOnLoginButton();
+          await basePage.clickOnLinkByName('Log in');
         });
         await customTest.step('Perform the Login Action with the Right Credentials and Store the cookies', async () => {
           await landingPage.performLoginaction(process.env.USERNAME, process.env.PASSWORD);
@@ -82,11 +86,11 @@ customTest.describe(
       '@regression @loginTests Verify that user is not allowed to login when the credentials are incorrect',
       async () => {
         await customTest.step('Navigate to the demoBlaze Website', async () => {
-          await landingPage.naviagetToDemoBlaze();
+          await basePage.navigateToDemoBlaze();
         });
 
         await customTest.step('Click on the Login Button to open the Login Window', async () => {
-          await landingPage.clickOnLoginButton();
+          await basePage.clickOnLinkByName('Log in');
         });
 
         await customTest.step(

@@ -1,11 +1,13 @@
 import { expect } from '@playwright/test';
+import * as fs from 'fs';
+import path from 'path';
 //const credentials = JSON.parse(JSON.stringify(require('../data/credentials.json')));
+const productAriaDataPath = path.resolve(__dirname, '../pagefactory/productAriaData.json');
 
 export class LandingPage {
   constructor(page) {
     this.page = page;
     this.actionTimeout = 2000;
-    this.webSiteurl = 'https://www.demoblaze.com/';
     this.loginButton = page.locator('#login2');
     this.usernameBox = page.locator('#loginusername');
     this.passwordBox = page.locator('#loginpassword');
@@ -15,11 +17,21 @@ export class LandingPage {
       "//h5[@id='logInModalLabel']//parent::div/following-sibling::div[@class='modal-footer'] //button[@data-dismiss='modal']"
     );
     this.loginCloseButton = page.locator("//h5[@id='logInModalLabel']/following-sibling::button[@class='close']");
+    this.cardBlock = "//a[text()='%s']/ancestor::div[@class='card-block']";
+
+    // Load ARIA data when the class is instantiated
+    this.productAriaData = this.loadAriaData();
   }
 
-  async naviagetToDemoBlaze() {
-    await this.page.goto(this.webSiteurl);
-    await this.page.waitForLoadState('domcontentloaded');
+  // Method to load ARIA data from the JSON file
+  loadAriaData() {
+    try {
+      const data = fs.readFileSync(productAriaDataPath, 'utf8');
+      return JSON.parse(data);
+    } catch (error) {
+      console.error(`Error reading or parsing ${productAriaDataPath}:`, error);
+      return {};
+    }
   }
 
   async clickOnLoginButton() {
@@ -106,17 +118,25 @@ export class LandingPage {
       throw error;
     }
   }
-
   async performLoginaction(username, password) {
     try {
       console.log(`🔐 Logging in with: ${username} (PASSWORD: ${password ? '***' : 'NOT SET'})`);
       await this.populateLoginDetails(username, password);
       await this.clickOnLoginSubmit();
-      await this.loggedInuser.waitFor({ state: 'visible', timeout: 10000 });
+      await this.loggedInuser.waitFor({ state: 'attached', timeout: 10000 });
       console.log('✓ Login successful');
     } catch (error) {
       console.error('Error in performLoginaction:', error);
       throw error;
     }
+  }
+  async validateProductAriaSnapshot(productTitle) {
+    const expectedAriaSnapshot = this.productAriaData[productTitle];
+
+    if (!expectedAriaSnapshot) {
+      throw new Error(`ARIA snapshot data not found for product: ${productTitle}`);
+    }
+    const expectedCardBlock = this.cardBlock.replace('%s', productTitle);
+    await expect(this.page.locator(expectedCardBlock)).toMatchAriaSnapshot(expectedAriaSnapshot);
   }
 }

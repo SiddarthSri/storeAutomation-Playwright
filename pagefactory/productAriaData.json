@@ -1,0 +1,4 @@
+{
+  "ASUS Full HD": "        - heading \"ASUS Full HD\" [level=4]:\n          - link \"ASUS Full HD\":\n            - /url: prod.html?idp_=14\n        - heading /\\$\\d+/ [level=5]\n        - paragraph: /ASUS VS247H-P \\d+\\.\\d+- Inch Full HD/",
+  "On<ctrl62><ctrl61>ePlus 9": "        - heading \"OnePlus 9\" [level=4]:\n          - link \"OnePlus 9\":\n            - /url: prod.html?idp_=8\n        - heading /\\$\\d+/ [level=5]\n        - paragraph: /OnePlus 9 5G Android Smartphone/ - 12 GB RAM, 256 GB Storage/"
+}
