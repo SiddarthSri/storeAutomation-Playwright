@@ -8,6 +8,7 @@ export class BasePage {
   }
 
   async navigateToDemoBlaze() {
+    console.log(`🌐 Navigating to: ${this.webSiteurl}`);
     await this.page.goto(this.webSiteurl);
     await this.page.waitForLoadState('domcontentloaded');
   }

@@ -5,18 +5,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
 
-// Force load environment variables FIRST
-const envName = process.env.ENV || 'prod';
-const projectRoot = process.cwd();
-const envPath = path.join(projectRoot, 'environmentFiles', `.env.${envName}`);
-
-// override: true is not needed since we use APP_USERNAME instead of USERNAME
-const result = dotenv.config({ path: envPath });
-if (result.error) {
-  console.error(`Failed to load .env file:`, result.error);
-} else {
-  console.log(`Credentials Loaded: ${process.env.APP_USERNAME ? '***' : 'NOT SET'}`);
-}
+// Environment variables are now loaded in playwright.config.js
 
 export const customTest = base.extend({
   authenticatedContext: async ({ browser }, use) => {

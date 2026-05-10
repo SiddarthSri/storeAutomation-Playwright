@@ -1,11 +1,21 @@
 // @ts-check
 import { devices } from '@playwright/test';
 
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// require('dotenv').config();
+const envName = process.env.ENV || 'prod';
+dotenv.config({ path: path.resolve(__dirname, 'environmentFiles', `.env.${envName}`) });
+
+console.log(`Environment: ${envName} | APP_USERNAME: ${process.env.APP_USERNAME ? '***' : 'NOT SET'}`);
 
 
 /**
