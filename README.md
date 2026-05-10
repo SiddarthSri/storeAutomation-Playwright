@@ -4,15 +4,17 @@ A modern UI & API automation testing suite built with **Playwright** for testing
 
 ## Overview
 
-This project demonstrates end-to-end testing best practices including:
-- **Page Object Model** for maintainable test code
-- **API Testing** integrated seamlessly alongside UI tests
-- **Custom Fixtures** for reusable test setup and session management
-- **Environment-based configuration** (`.env.prod`) that cleanly hands off to GitHub Actions secrets
-- **Tagged tests** for selective test execution
-- **GitHub Actions CI/CD** pipeline
+This project demonstrates scalable automation best practices by combining robust UI testing with backend API validations.
 
-See the full architectural breakdown in [architecture.md](./architecture.md).
+Key pillars of this framework:
+- **Page Object Model (POM)**: Decouples UI locators from test logic.
+- **Custom Fixtures**: Automatically manages authenticated and unauthenticated browser states.
+- **Environment Management**: Seamlessly transitions from local `.env` files to GitHub Actions secrets.
+- **API Integration**: Centralized API registry for hitting backend endpoints directly.
+
+**👉 For a deep dive into the framework's design, read the [Architecture Documentation](./architecture.md).**
+
+---
 
 ## Quick Start
 
@@ -29,25 +31,27 @@ npx playwright install --with-deps
 
 ### Configuration
 
-Add your credentials and URLs to `.env.prod`:
+Populate the empty keys in `environmentFiles/.env.prod` with your credentials and target URLs:
 ```
 APP_USERNAME=your_username
 PASSWORD=your_password
 BASE_URL=https://www.demoblaze.com/
 API_BASE_URL=https://api.demoblaze.com
 ```
-*Note: We use `APP_USERNAME` instead of `USERNAME` to prevent collision with Windows system variables.*
+*Note: We use `APP_USERNAME` instead of `USERNAME` to prevent collision with Windows system variables during local execution.*
 
-### Running Tests
+---
+
+## Running Tests
 
 ```bash
-# Run all tests
+# Run all tests (UI + API)
 npx playwright test
 
-# Run tests in UI mode (interactive)
+# Run tests in UI mode (interactive debugging)
 npx playwright test --ui
 
-# Run specific test file
+# Run a specific test file
 npx playwright test tests/loginTest.spec.js
 
 # Run by tag
@@ -55,20 +59,25 @@ npx playwright test --grep @regression
 npx playwright test --grep @smoke
 ```
 
+---
+
 ## Project Structure
 
 ```
 ├── api/                  # API endpoints registry (ApiRegistry)
-├── pageObjects/          # Page Object classes (locators & methods)
+├── pageObjects/          # Page Object classes (BasePage, LandingPage, etc.)
 ├── tests/                # UI and API test specifications
-├── customFixtures/       # Custom Playwright fixtures (authentication)
+├── customFixtures/       # Custom Playwright fixtures (Session management)
 ├── environmentFiles/     # Environment config (.env templates)
 ├── data/                 # Test data (ARIA snapshots, etc.)
 ├── architecture.md       # Framework architecture details
 └── playwright.config.js  # Playwright configuration
 ```
 
-## CI/CD
+---
 
-Tests run automatically on push to `main`/`master` via GitHub Actions (`playwright.yml`). 
-The workflow dynamically pulls credentials and base URLs from the `StoreAutomation.Prod` environment secrets in GitHub, overriding any local `.env` values.
+## CI/CD Pipeline
+
+Tests run automatically on push to `main`/`master` via GitHub Actions (`.github/workflows/playwright.yml`). 
+
+The pipeline uses the `StoreAutomation.Prod` GitHub environment. Secrets (`APP_USERNAME`, `PASSWORD`) and Variables (`BASE_URL`, `API_BASE_URL`) injected by GitHub will automatically override local empty `.env` files, ensuring a secure and seamless CI execution. Test artifacts (reports, traces) are retained for 30 days.
