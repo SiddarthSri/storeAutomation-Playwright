@@ -2,6 +2,11 @@ import { expect } from '@playwright/test';
 import { BasePage } from './basePage.js';
 import * as fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 //const credentials = JSON.parse(JSON.stringify(require('../data/credentials.json')));
 const productAriaDataPath = path.resolve(__dirname, '../pagefactory/productAriaData.json');
 
