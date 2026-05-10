@@ -1,6 +1,6 @@
 class ApiRegistry {
     constructor() {
-        this.baseUrl = 'https://api.demoblaze.com';
+        this.baseUrl = process.env.APIHOST || 'https://api.demoblaze.com';
         
         this.endpoints = {
             signup: `${this.baseUrl}/signup`,

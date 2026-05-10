@@ -14,6 +14,7 @@ jobs:
       APP_USERNAME: ${{ secrets.APP_USERNAME }}
       PASSWORD: ${{ secrets.PASSWORD }}
       BASE_URL: ${{ vars.BASEURL || secrets.BASEURL || vars.BASE_URL || secrets.BASE_URL }}
+      APIHOST: ${{ vars.APIHOST || secrets.APIHOST }}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
