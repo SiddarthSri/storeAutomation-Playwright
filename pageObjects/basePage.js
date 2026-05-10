@@ -4,8 +4,7 @@ export class BasePage {
   constructor(page) {
     this.page = page;
     this.actionTimeout = 2000;
-    if (!process.env.BASE_URL) throw new Error('BASE_URL is not set. Check your .env.prod or GitHub secrets.');
-    this.webSiteurl = process.env.BASE_URL;
+    this.webSiteurl = process.env.BASEURL || process.env.BASE_URL || 'https://www.demoblaze.com/';
   }
 
   async navigateToDemoBlaze() {

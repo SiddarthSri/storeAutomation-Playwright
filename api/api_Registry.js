@@ -1,7 +1,6 @@
 class ApiRegistry {
     constructor() {
-        if (!process.env.API_BASE_URL) throw new Error('API_BASE_URL is not set. Check your .env.prod or GitHub secrets.');
-        this.baseUrl = process.env.API_BASE_URL;
+        this.baseUrl = 'https://api.demoblaze.com';
         
         this.endpoints = {
             signup: `${this.baseUrl}/signup`,
