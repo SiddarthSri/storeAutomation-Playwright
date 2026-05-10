@@ -4,7 +4,13 @@ export class BasePage {
   constructor(page) {
     this.page = page;
     this.actionTimeout = 2000;
-    this.webSiteurl = process.env.BASEURL || process.env.BASE_URL || 'https://www.demoblaze.com/';
+    
+    // Explicitly check for the standard BASE_URL first, then fallback to BASEURL
+    const url = process.env.BASE_URL || process.env.BASEURL || 'https://www.demoblaze.com/';
+    const source = process.env.BASE_URL ? 'BASE_URL' : (process.env.BASEURL ? 'BASEURL' : 'Default Fallback');
+    
+    this.webSiteurl = url;
+    console.log(`[BasePage] URL Source: ${source} | Value: ${this.webSiteurl}`);
   }
 
   async navigateToDemoBlaze() {
