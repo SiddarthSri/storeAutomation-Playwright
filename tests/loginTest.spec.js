@@ -71,7 +71,7 @@ customTest.describe(
           await basePage.clickOnLinkByName('Log in');
         });
         await customTest.step('Perform the Login Action with the Right Credentials and Store the cookies', async () => {
-          await landingPage.performLoginaction(process.env.USERNAME, process.env.PASSWORD);
+          await landingPage.performLoginaction(process.env.APP_USERNAME, process.env.PASSWORD);
         });
         await customTest.step(
           'Once the User is actually logged in validate the Logged In User Text is Visible',

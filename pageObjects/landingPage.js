@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { BasePage } from './basePage.js';
 import * as fs from 'fs';
 import path from 'path';
 //const credentials = JSON.parse(JSON.stringify(require('../data/credentials.json')));
@@ -7,6 +8,7 @@ const productAriaDataPath = path.resolve(__dirname, '../pagefactory/productAriaD
 export class LandingPage {
   constructor(page) {
     this.page = page;
+    this.basePage = new BasePage(page);
     this.actionTimeout = 2000;
     this.loginButton = page.locator('#login2');
     this.usernameBox = page.locator('#loginusername');
@@ -77,7 +79,7 @@ export class LandingPage {
     }
   }
 
-  async populateuserNameAndPassword(username = process.env.USERNAME, password = process.env.PASSWORD) {
+  async populateuserNameAndPassword(username = process.env.APP_USERNAME, password = process.env.PASSWORD) {
     await this.usernameBox.waitFor({ state: 'visible', timeout: this.actionTimeout });
     await this.usernameBox.fill(username);
     await this.passwordBox.fill(password);
@@ -102,15 +104,11 @@ export class LandingPage {
 
   async performSigninWithInvalidCredentials(username, password, expectedAlertMessage) {
     try {
-      let alertMessage = '';
-      this.page.once('dialog', (dialog) => {
-        alertMessage = dialog.message();
-        console.log(`Alert message: ${alertMessage}`);
-        dialog.accept();
-      });
       await this.populateLoginDetails(username, password);
-      await this.clickOnLoginSubmit();
-      await this.page.waitForTimeout(1000);
+      const dialog = await this.basePage.clickWithPollingAndWaitForDialog(this.loginSubmit, 10000);
+      const alertMessage = dialog.message();
+      console.log(`Alert message: ${alertMessage}`);
+      await dialog.accept();
       expect(alertMessage).toBe(expectedAlertMessage);
       return alertMessage;
     } catch (error) {

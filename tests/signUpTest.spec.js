@@ -38,7 +38,7 @@ customTest.describe('These Tests verify the different flows related to Sign Up',
 
     await customTest.step('Perform Sign Up Action with existing credentials and validate alert', async () => {
       // Assuming 'admin' and 'admin' are existing users, or the environment USERNAME
-      const existingUser = process.env.USERNAME || 'admin';
+      const existingUser = process.env.APP_USERNAME || 'admin';
       const existingPass = process.env.PASSWORD || 'admin';
       await signUpPage.performSignUpActionAndAcceptAlert(
         existingUser,

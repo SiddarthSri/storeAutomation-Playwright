@@ -1,9 +1,11 @@
 import { expect } from '@playwright/test';
+import { BasePage } from './basePage.js';
 
 export class SignUpPage {
   constructor(page) {
     this.page = page;
     this.actionTimeout = 2000;
+    this.basePage = new BasePage(page);
     this.usernameBox = page.locator('#sign-username');
     this.passwordBox = page.locator('#sign-password');
     this.signUpButton = page.locator("//button[@onclick='register()']");
@@ -43,11 +45,7 @@ export class SignUpPage {
     try {
       await this.populateSignUpDetails(username, password);
       
-      // Import and instantiate BasePage to use the robust polling & Promise.race utility
-      const { BasePage } = require('./basePage');
-      const basePage = new BasePage(this.page);
-      
-      const dialog = await basePage.clickWithPollingAndWaitForDialog(this.signUpButton, 10000);
+      const dialog = await this.basePage.clickWithPollingAndWaitForDialog(this.signUpButton, 10000);
       
       const alertMessage = dialog.message();
       console.log(`Alert message: ${alertMessage}`);

@@ -10,12 +10,12 @@ const envName = process.env.ENV || 'prod';
 const projectRoot = process.cwd();
 const envPath = path.join(projectRoot, 'environmentFiles', `.env.${envName}`);
 
-// override: true forces dotenv to override existing env vars (like Windows USERNAME)
-const result = dotenv.config({ path: envPath, override: true });
+// override: true is not needed since we use APP_USERNAME instead of USERNAME
+const result = dotenv.config({ path: envPath });
 if (result.error) {
   console.error(`Failed to load .env file:`, result.error);
 } else {
-  console.log(`Credentials Loaded: ${process.env.USERNAME ? '***' : 'NOT SET'}`);
+  console.log(`Credentials Loaded: ${process.env.APP_USERNAME ? '***' : 'NOT SET'}`);
 }
 
 export const customTest = base.extend({
@@ -27,7 +27,7 @@ export const customTest = base.extend({
     try {
       await basePage.navigateToDemoBlaze();
       await basePage.clickOnLinkByName('Log in');
-      await landingPage.performLoginaction(process.env.USERNAME, process.env.PASSWORD);
+      await landingPage.performLoginaction(process.env.APP_USERNAME, process.env.PASSWORD);
       await context.storageState({ path: 'StorageState.json' });
       await use(context, page);
     } catch (error) {

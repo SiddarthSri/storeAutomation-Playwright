@@ -1,9 +1,11 @@
 import { expect } from '@playwright/test';
+import { BasePage } from './basePage.js';
 
 export class ProductDetailsPage {
   constructor(page) {
     this.page = page;
     this.actionTimeout = 2000;
+    this.basePage = new BasePage(page);
     this.productName = page.locator('.name');
     this.productPrice = page.locator('.price-container');
     this.productDescription = page.locator('#more-information');
@@ -18,11 +20,7 @@ export class ProductDetailsPage {
 
   async clickAddToCartAndAcceptAlert() {
     try {
-      // Import and instantiate BasePage to use the robust polling & Promise.race utility
-      const { BasePage } = require('./basePage');
-      const basePage = new BasePage(this.page);
-      
-      const dialog = await basePage.clickWithPollingAndWaitForDialog(this.addToCartButton, 10000);
+      const dialog = await this.basePage.clickWithPollingAndWaitForDialog(this.addToCartButton, 10000);
       
       const alertMessage = dialog.message();
       console.log(`Alert message: ${alertMessage}`);

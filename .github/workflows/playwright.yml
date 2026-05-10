@@ -8,8 +8,13 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    environment: StoreAutomation.Prod
     env:
       ENV: prod
+      APP_USERNAME: ${{ secrets.APP_USERNAME }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      BASE_URL: ${{ vars.BASE_URL || secrets.BASE_URL }}
+      API_BASE_URL: ${{ vars.API_BASE_URL || secrets.API_BASE_URL }}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4

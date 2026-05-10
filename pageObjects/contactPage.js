@@ -1,9 +1,11 @@
 import { expect } from '@playwright/test';
+import { BasePage } from './basePage.js';
 
 export class ContactPage {
   constructor(page) {
     this.page = page;
     this.actionTimeout = 2000;
+    this.basePage = new BasePage(page);
     this.contactEmailBox = page.locator('#recipient-email');
     this.contactNameBox = page.locator('#recipient-name');
     this.messageBox = page.locator('#message-text');
@@ -23,8 +25,6 @@ export class ContactPage {
 
   async clickOnSendMessage() {
     try {
-      // Playwright's .click() automatically waits for the element to be visible, enabled, and stable.
-      // We removed the redundant waitFor() and the aggressive 2-second timeout.
       await this.sendMessageButton.click();
     } catch (error) {
       console.error('Error in clickOnSendMessage:', error);
@@ -46,11 +46,7 @@ export class ContactPage {
     try {
       await this.populateContactForm(email, name, message);
       
-      // Import and instantiate BasePage to use the robust polling & Promise.race utility
-      const { BasePage } = require('./basePage');
-      const basePage = new BasePage(this.page);
-      
-      const dialog = await basePage.clickWithPollingAndWaitForDialog(this.sendMessageButton, 10000);
+      const dialog = await this.basePage.clickWithPollingAndWaitForDialog(this.sendMessageButton, 10000);
       
       const alertMessage = dialog.message();
       console.log(`Alert message: ${alertMessage}`);
