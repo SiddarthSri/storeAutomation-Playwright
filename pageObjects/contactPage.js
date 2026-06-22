@@ -45,13 +45,13 @@ export class ContactPage {
   async performSendMessageAndAcceptAlert(email, name, message, expectedAlertMessage) {
     try {
       await this.populateContactForm(email, name, message);
-      
+
       const dialog = await this.basePage.clickWithPollingAndWaitForDialog(this.sendMessageButton, 10000);
-      
+
       const alertMessage = dialog.message();
       console.log(`Alert message: ${alertMessage}`);
       await dialog.accept();
-      
+
       expect(alertMessage).toBe(expectedAlertMessage);
       return alertMessage;
     } catch (error) {
